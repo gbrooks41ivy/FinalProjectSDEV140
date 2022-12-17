@@ -1,0 +1,512 @@
+#---------------GRANT BROOKS SDEV140 FINAL PROJECT---------------
+#MAKE SURE TO INSTALL THE REQUIRED PACKS!! THIS PROGRAM NEEDS PILLOW 9.3.0 INSTALLED!!!
+
+
+#start
+import tkinter as tk
+from tkinter import ttk, messagebox
+from PIL import Image, ImageTk
+
+#def
+def Start_application():
+#Framing
+    dessert = order_info["Dessert"].get()
+    if dessert == "Sundae":
+        init_sundae()
+        sundae.tkraise()
+    if dessert == "Milkshake":
+        init_milkshake()
+        milkshake.tkraise()
+
+#toggleables
+def toggle(check, flavor_menu, topping_menu):
+    checked = check.get()
+    if not checked:
+        flavor_menu["state"] = "disabled"
+        topping_menu["state"] = "disabled"
+    if checked:
+        flavor_menu["state"] = "normal"
+        topping_menu["state"] = "normal"
+
+#submitting the order
+def submit_order():
+    init_thanks()
+    thanks.tkraise()
+    messagebox.showinfo("Thank you", "Thank you for placing an order!")
+
+#sundaaes
+def init_sundae():
+#Logic for creating the selection page
+
+    heading_frame = ttk.Frame(sundae)
+    heading_frame.grid(row=0, column=0, sticky="n")
+
+    option_frame = ttk.Frame(sundae)
+    option_frame.grid(row=1, column=0, sticky="n")
+
+    banner = f"Let's make {order_info['Name'].get()}'s sundae!"
+    msg = "Do things to get stuff."
+
+    banner_label = ttk.Label(heading_frame, style="banner.TLabel", text=banner)
+    msg_label = ttk.Label(heading_frame, text=msg)
+    banner_label.grid(row=0, column=0, sticky="nsew")
+    msg_label.grid(row=1, column=0, sticky="nsew", pady=[0, 30])
+
+    flavors_label = ttk.Label(option_frame, text="Choose the flavor...")
+    toppings_label = ttk.Label(option_frame, text="Choose a toppings.")
+    extras_label = ttk.Label(option_frame, text="Add-ons:")
+
+    flavor1_menu = ttk.OptionMenu(
+        option_frame, order_info["Flavor 1"], "Choose one:", *flavors
+    )
+    flavor1_menu["menu"].config(
+        background="white",
+        font=("Arial", 16),
+    )
+
+    flavor2_menu = ttk.OptionMenu(
+        option_frame, order_info["Flavor 2"], "Choose one:", *flavors
+    )
+    flavor2_menu["state"] = "disabled"
+    flavor2_menu["menu"].config(
+        background="white",
+        font=("Arial", 16),
+    )
+
+    flavor3_menu = ttk.OptionMenu(
+        option_frame,
+        order_info["Flavor 3"],
+        "Choose one:",
+        *flavors,
+    )
+    flavor3_menu["state"] = "disabled"
+    flavor3_menu["menu"].config(
+        background="white",
+        font=("Arial", 16),
+    )
+
+    toppings1_menu = ttk.OptionMenu(
+        option_frame, order_info["Topping 1"], "Choose one:", *toppings
+    )
+    toppings1_menu["menu"].config(
+        background="white",
+        font=("Arial", 16),
+    )
+
+    toppings2_menu = ttk.OptionMenu(
+        option_frame, order_info["Topping 2"], "Choose one:", *toppings
+    )
+    toppings2_menu["state"] = "disabled"
+    toppings2_menu["menu"].config(
+        background="white",
+        font=("Arial", 16),
+    )
+
+    toppings3_menu = ttk.OptionMenu(
+        option_frame, order_info["Topping 3"], "Choose one:", *toppings
+    )
+    toppings3_menu["state"] = "disabled"
+    toppings3_menu["menu"].config(
+        background="white",
+        font=("Arial", 16),
+    )
+
+    flavor2_var = tk.BooleanVar()
+    flavor2_check = ttk.Checkbutton(
+        option_frame,
+        style="mini.TCheckbutton",
+        variable=flavor2_var,
+        command=lambda: toggle(flavor2_var, flavor2_menu, toppings2_menu),
+    )
+    flavor3_var = tk.BooleanVar()
+    flavor3_check = ttk.Checkbutton(
+        option_frame,
+        style="mini.TCheckbutton",
+        variable=flavor3_var,
+        command=lambda: toggle(flavor3_var, flavor3_menu, toppings3_menu),
+    )
+
+    nuts_check = ttk.Checkbutton(option_frame, text="Nuts", variable=order_info["Nuts"])
+    whip_check = ttk.Checkbutton(
+        option_frame, text="Whipping Cream", variable=order_info["Whip"]
+    )
+    cherry_check = ttk.Checkbutton(
+        option_frame, text="Cherry on Top", variable=order_info["Cherry"]
+    )
+
+    # LAYOUTS
+    flavors_label.grid(row=2, column=1, sticky="w")
+    toppings_label.grid(row=2, column=3, sticky="e")
+
+    flavor1_menu.grid(row=3, column=1, sticky="e")
+    ttk.Label(option_frame, text="with").grid(row=3, column=2)
+    toppings1_menu.grid(row=3, column=3)
+
+    flavor2_check.grid(row=4, column=0, sticky="e")
+    flavor2_menu.grid(row=4, column=1, sticky="e")
+    ttk.Label(option_frame, text="with").grid(row=4, column=2)
+    toppings2_menu.grid(row=4, column=3)
+
+    flavor3_check.grid(row=5, column=0, sticky="e")
+    flavor3_menu.grid(row=5, column=1, sticky="e")
+    ttk.Label(option_frame, text="with").grid(row=5, column=2)
+    toppings3_menu.grid(row=5, column=3)
+
+    extras_label.grid(row=6, column=1, columnspan=2, sticky="w", pady=[20, 0])
+    nuts_check.grid(row=7, column=1, columnspan=2, sticky="w")
+    whip_check.grid(row=7, column=1, columnspan=2, sticky="e")
+    cherry_check.grid(row=7, column=3, sticky="w")
+
+    #buttons
+    button_frame = ttk.Frame(sundae)
+    button_frame.grid(row=8, column=0, sticky="n")
+
+    order_button = ttk.Button(
+        button_frame,
+        text="Submit Order",
+        style="button.TLabel",
+        command=submit_order,
+        width=15,
+    )
+    order_button.grid(row=0, column=0, pady=[50, 0], padx=10)
+    exit_button = ttk.Button(
+        button_frame,
+        padding=3,
+        text="Exit",
+        style="button.TLabel",
+        command=scoops.destroy,
+    )
+    # exit_button.grid(row=8, column=0, sticky="s", ipadx=30)
+    exit_button.grid(row=0, column=1, sticky="s", ipadx=10, ipady=4)
+
+
+def init_milkshake():
+    """Logic for creating, populating milkshake order page"""
+    banner = f"Let's make {order_info['Name'].get()}'s milkshake!"
+    msg = "Please wait while we get your delicious Milkshake ready!\n Thank you for your patience.. !"
+
+    banner_label = ttk.Label(milkshake, style="banner.TLabel", text=banner)
+    msg_label = ttk.Label(milkshake, text=msg)
+
+    banner_label.grid(row=0, column=0)
+    msg_label.grid(row=1, column=0)
+
+    # menu ------------------
+    choose_frame = tk.Frame(milkshake, bg="#ffffff")
+    choose_frame.grid(row=2, column=0)
+    flavors = ["Chocolate", "Vanilla", "Strawberry"]
+    sizes = ["Small", "Large"]
+
+    size_label = ttk.Label(choose_frame, text="Choose size :")
+    size_label.grid(row=0, column=0, sticky="ne")
+
+    flavors_label = ttk.Label(choose_frame, text="Choose your Flavour :")
+    flavors_label.grid(row=1, column=0, sticky="ne")
+
+    extras_label = ttk.Label(choose_frame, text="Add some extras :")
+    extras_label.grid(row=2, column=0, sticky="e")
+
+    size = ttk.OptionMenu(
+        choose_frame, order_info_milkshake['Size'], "Choose one:", *sizes
+    )
+    size.grid(row=0, column=1, padx=30)
+    size["menu"].config(
+        background="white",
+        font=("Arial", 16),
+    )
+
+    flv = ttk.OptionMenu(
+        choose_frame, order_info_milkshake['Flavor'], "Choose one:", *flavors
+    )
+    flv.grid(row=1, column=1, padx=30)
+    flv["menu"].config(
+        background="white",
+        font=("Arial", 16),
+    )
+
+    checkbox_frame = tk.Frame(choose_frame, bg="#ffffff")
+    checkbox_frame.grid(row=2, column=1)
+
+    nuts_check = ttk.Checkbutton(checkbox_frame, text="Nuts", variable=order_info_milkshake["Nuts"], width=5)
+    whip_check = ttk.Checkbutton(
+        checkbox_frame, text="Whipped Cream", variable=order_info_milkshake["Whip"]
+    )
+    cherry_check = ttk.Checkbutton(
+        checkbox_frame, text="Cherry on Top", variable=order_info_milkshake["Cherry"]
+    )
+    nuts_check.grid(row=0, column=1, sticky="w")
+    whip_check.grid(row=0, column=2, sticky="w")
+    cherry_check.grid(row=0, column=3, sticky="w")
+
+    m_btn_frame = tk.Frame(milkshake, bg="#ffffff")
+    m_btn_frame.grid(row=3, column=0)
+
+    submit = ttk.Button(
+        m_btn_frame,
+        padding=3,
+        text="Submit",
+        style="button.TLabel",
+        command=submit_order,
+    )
+    submit.grid(row=0, column=0, sticky="s", ipadx=10, ipady=4, pady=50, padx=30)
+
+    exit_button = ttk.Button(
+        m_btn_frame,
+        padding=3,
+        text="Exit",
+        style="button.TLabel",
+        command=scoops.destroy,
+    )
+    exit_button.grid(row=0, column=1, sticky="s", ipadx=10, ipady=4, pady=50, padx=30)
+
+
+def init_thanks():
+    thank_head = tk.Frame(thanks, bg="#ffffff")
+    thank_head.grid(row=0, column=0)
+
+    msg = "You have ordered the following items: "
+    tk.Label(thank_head, text=msg, font=("helvetica", 14, "bold"), bg="#ffffff").grid(row=0, column=0, sticky="n",
+                                                                                      pady=20)
+
+    thank_heading_frame = tk.Frame(thanks, bg="#ffffff")
+    thank_heading_frame.grid(row=1, column=0, sticky="n")
+
+    dessert = order_info["Dessert"].get()
+    row_start = 1
+    for counter, (k, v) in enumerate(order_info.items()):
+        v = v.get()
+        if v == "Choose one:":
+            v = None
+        if counter == 0 or counter == 1:
+            l = tk.Label(thank_heading_frame, text=f"{k} :", bg="#ffffff", font=("helvetica", 14, "bold"))
+            l.grid(row=row_start + counter, column=0, sticky="e", padx=20)
+            r = tk.Label(thank_heading_frame, text=v, bg="#ffffff", font=("helvetica", 14, "bold"))
+            r.grid(row=row_start + counter, column=1, sticky="e", padx=20)
+
+    if dessert == 'Milkshake':
+
+        for counter, (k, v) in enumerate(order_info_milkshake.items()):
+            v = v.get()
+            if v == "Choose one:":
+                v = None
+            if counter >= 2:
+                l = tk.Label(thank_heading_frame, text=f"{k} :", bg="#ffffff", font=("helvetica", 14, "bold"))
+                l.grid(row=counter + 1, column=0, sticky="e", padx=20)
+                r = tk.Label(thank_heading_frame, text=v, bg="#ffffff", font=("helvetica", 14, "bold"))
+                r.grid(row=counter + 1, column=1, sticky="e", padx=20)
+    else:
+
+        for counter, (k, v) in enumerate(order_info.items()):
+            v = v.get()
+            if v == "Choose one:":
+                v = None
+
+            if counter >= 2:
+                l = tk.Label(thank_heading_frame, text=f"{k} :", bg="#ffffff", font=("helvetica", 14, "bold"))
+                l.grid(row=1 + counter, column=0, sticky="e", padx=20)
+                r = tk.Label(thank_heading_frame, text=v, bg="#ffffff", font=("helvetica", 14, "bold"))
+                r.grid(row=1 + counter, column=1, sticky="e", padx=20)
+
+    thank_button_frame = tk.Frame(thanks)
+    thank_button_frame.grid(row=2, column=0, sticky="n", pady=40)
+
+    exit_button = ttk.Button(
+        thank_button_frame,
+        padding=3,
+        text="Exit",
+        style="button.TLabel",
+        command=scoops.destroy
+    )
+    exit_button.grid(row=0, column=1, sticky="n", ipadx=10, ipady=5)
+
+
+#Framework
+scoops = tk.Tk()
+scoops.title("Menu Selection")
+scoops.geometry("1000x900")
+scoops.wm_iconbitmap('icon.ico')
+scoops.configure(background="#ffffff")
+scoops.resizable(False, False)
+scoops.grid_anchor("n")
+
+logo_frame = ttk.Frame(scoops)
+main_frame = ttk.Frame(scoops)
+logo_frame.grid_anchor("n")  # sets grid default placement to top, center
+logo_frame.grid(row=0, column=0, sticky="nsew")
+main_frame.grid_anchor("n")
+main_frame.grid(row=1, column=0, sticky="nsew")
+
+home = ttk.Frame(main_frame)
+sundae = ttk.Frame(main_frame)
+milkshake = ttk.Frame(main_frame)
+thanks = ttk.Frame(main_frame)
+
+for frame in (home, sundae, milkshake, thanks):
+    frame.grid_anchor("n")
+    frame.grid(row=0, column=0, sticky="nsew")
+
+l_img = Image.open("ike_logo.png")
+l_img = l_img.resize((300, 300))
+# logo_img = tk.PhotoImage(file=l_img)
+logo_img = ImageTk.PhotoImage(l_img)
+logo_label = ttk.Label(logo_frame, image=logo_img)
+logo_label.grid(row=0, column=0, sticky="nsew")
+
+style = ttk.Style(scoops)
+# sets defaults for all frame objects
+style.configure(
+    "TFrame",
+    background="#ffffff",
+)
+# sets defaults for all label and button objects
+style.configure(
+    "TLabel",
+    anchor="center",
+    background="#ffffff",
+    font=("Arial", 16),
+    foreground="#551802",
+    justify="center",
+    padding=8,
+    wraplength=700,
+)
+# overrides specified label settings when called
+style.configure(
+    "banner.TLabel",
+    font=("Arial", 32),
+    padding=0,
+    wraplength="",
+)
+style.configure(
+    "button.TLabel",
+    background="#551802",
+    font=("Arial", 20, "bold"),
+    foreground="white",
+    width=10,
+)
+# sets defaults for specified dynamic values (for all buttons)
+style.map(
+    "button.TLabel",
+    background=[("pressed", "!disabled", "brown"), ("active", "brown")],
+    foreground=[("pressed", "white"), ("active", "white")],
+    relief=[("pressed", "sunken"), ("!pressed", "raised")],
+)
+# sets defaults for specified dynamic values (for exit button)
+style.map(
+    "exit.TLabel",
+    background=[("pressed", "!disabled", "brown"), ("active", "brown")],
+    foreground=[("pressed", "white"), ("active", "white")],
+    relief=[("pressed", "sunken"), ("active", "raised")],
+)
+# sets defaults for optionmenu objects
+style.configure(
+    "TMenubutton",
+    background="white",
+    font=("Arial", 16),
+    width=15,
+)
+# sets defaults for checkbutton objects
+style.configure(
+    "TCheckbutton",
+    background="#ffffff",
+    foreground="#551802",
+    font=("Arial", 16),
+    width=15,
+)
+style.configure("mini.TCheckbutton", width=0)
+#types of flavors
+flavors = ["Chocolate", "Vanilla", "Strawberry"]
+toppings = [
+    "Chocolate Syrup",
+    "Vanilla Syrup",
+    "Caramel Syrup",
+    "Strawberry Syrup",
+    "Blueberry Syrup",
+    "Raspberry Syrup",
+]
+#order info reciept
+order_info = {
+    "Name": tk.StringVar(main_frame),
+    "Dessert": tk.StringVar(main_frame),
+    "Flavor 1": tk.StringVar(main_frame),
+    "Flavor 2": tk.StringVar(main_frame),
+    "Flavor 3": tk.StringVar(main_frame),
+    "Topping 1": tk.StringVar(main_frame),
+    "Topping 2": tk.StringVar(main_frame),
+    "Topping 3": tk.StringVar(main_frame),
+    "Nuts": tk.BooleanVar(main_frame),
+    "Whip": tk.BooleanVar(main_frame),
+    "Cherry": tk.BooleanVar(main_frame),
+}
+#order info reciept for milkshake
+order_info_milkshake = {
+    "Name": tk.StringVar(main_frame),
+    "Dessert": tk.StringVar(main_frame),
+    "Flavor": tk.StringVar(main_frame),
+    "Size": tk.StringVar(main_frame),
+    "Nuts": tk.BooleanVar(main_frame),
+    "Whip": tk.BooleanVar(main_frame),
+    "Cherry": tk.BooleanVar(main_frame),
+}
+#Home screen
+#home widgets
+
+home_heading_frame = tk.Frame(home, bg="#ffffff")
+home_heading_frame.grid(row=0, column=0)
+
+# build text strings
+welcome_banner = "Welcome To Ike's menu selection application"
+welcome_msg = "Order your tasty treat from the comfort of your table!"
+name_msg = "Name:"
+select_msg = "Milkshake or Sundae?:"
+
+# build labels
+welcome_banner_label = ttk.Label(home_heading_frame, style="banner.TLabel", text=welcome_banner)
+welcome_msg_label = ttk.Label(home_heading_frame, text=welcome_msg)
+name_label = ttk.Label(home_heading_frame, text=name_msg)
+# build entry box for user name
+name_entry = ttk.Entry(
+    home_heading_frame,
+    font=("Arial", 16),
+    textvariable=order_info["Name"],
+    width=20,
+)
+
+# build optionmenu
+select_label = ttk.Label(home_heading_frame, text=select_msg)
+options = ["Sundae", "Milkshake"]
+home_menu = ttk.OptionMenu(home_heading_frame, order_info["Dessert"], "Choose one:", *options)
+home_menu["menu"].config(
+    background="white",
+    font=("Arial", 16),
+)
+# layout for row 0
+welcome_banner_label.grid(row=0, column=0, columnspan=2, sticky="n")
+# layout for row 1
+welcome_msg_label.grid(row=1, column=0, columnspan=2, sticky="n", pady=[0, 20])
+# layout for row 2
+name_label.grid(row=2, column=0, sticky="e", padx=0)
+name_entry.grid(row=2, column=1, sticky="w", padx=0)
+
+# layout for row 3
+select_label.grid(row=3, column=0, sticky="e")
+home_menu.grid(row=3, column=1, sticky="w")
+
+home_button_frame = tk.Frame(home, bg="#ffffff")
+home_button_frame.grid(row=1, column=0, sticky="n", pady=50)
+
+exit_button = ttk.Button(
+    # logo_frame,
+    home_button_frame,
+    padding=3,
+    text="Exit",
+    style="button.TLabel",
+    command=scoops.destroy
+)
+exit_button.grid(row=0, column=1, sticky="n", ipadx=10, ipady=5)
+# build button to go next page
+go_button = ttk.Button(home_button_frame, text="Select!", style="button.TLabel", command=Start_application)
+go_button.grid(row=0, column=0, padx=30)
+
+# run application
+home.tkraise()
+scoops.mainloop()
